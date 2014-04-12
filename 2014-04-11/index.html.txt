@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>427156 - Homework 2 11-04-2014</title>
+</head>
+<body>	
+Building: <b>Burj Khalifa</b></br>
+Name: <b>Nicola</b></br>
+Surname: <b>Russo</b></br>
+University ID: <b>433040</b></br>
+</br>
+</br>
+Documentation: <ol>
+<li><a href="http://www.dia.uniroma3.it/~paoluzzi/web/did/graficacomp/2014/notes/">Computational Graphics 2014</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Burj_Khalifa">Burj Khalifa Wikipedia</a></li>
+</ol>
+</br>
+</br>
+
+Link to project:
+<ol>
+<li><a href="python/exercise1.py">exercise1.py</li>
+<li><a href="python/exercise2.py">exercise2.py</li>
+<li><a href="python/exercise1+2.py">Struttura Completa</li>
+<li><a href="python/exercise3.py">exercise3.py</li>
+<li><a href="python/exercise4.py">exercise4.py</li>
+<li><a href="python/exercise1+2+3+4.py">Burj Khalifa (final + land)</li>
+</ol>
+</br>
+</br>
+Images:
+</br>
+</br>
+
+<a href="images/BurjKhalifa_Final1.png"><img src="images/BurjKhalifa_Final1.png" heigth="30%" width="30%"/>Burj Khalifa (completo).</a>
+</br>
+</br>
+<a href="images/BurjKhalifa_Final.png"><img src="images/BurjKhalifa_Final.png" heigth="30%" width="30%"/>Burj Khalifa (completo - view 2).</a>
+</br>
+</br>
+<a href="images/urban_fittings.png"><img src="images/urban_fittings.png" heigth="30%" width="30%"/>Arredo urbano.</a>
+</br>
+</br>
+<a href="images/BurjKhalifa_StructComplete.png"><img src="images/BurjKhalifa_StructComplete.png" heigth="30%" width="30%"/>Burj Khalifa (solo struttura; exercise1+2)</a>
+</br>
+</br>
+<a href="images/BurjKhalifa_onlyStruct.png"><img src="images/BurjKhalifa_onlyStruct.png" heigth="30%" width="30%"/>Composizione Struttura (exercise1).</a>
+</br>
+</br>
+<a href="images/Burj-Dubai-helicopter-aerial.jpg"><img src="images/Burj-Dubai-helicopter-aerial.jpg" heigth="30%" width="30%"/>Modello reale.</a>
+</br>
+</br>
+Description:</br>
+Il progetto è stato realizzato quasi totalmente con le librerie Lar-cc. Per la realizzazione della struttura (16 piani + antenna) ho definito (esercizio1):</br>
+larKhalifaFloor(wingA = 0, wingB = 0, wingC = 0) : genera piani per la struttura. Consene di modificare le ali del piano allungandole (valori negativi) ed accorciandole (valori positivi).
+</br>
+larKhalifaPillar(params): genera pilastri cilindrici per la struttura.
+</br>
+Per la realizzazione delle coperture verticali (esercizio2) ho definito:
+</br>
+larKhalifaPillarsVerticalEnclosures(params): genera pareti cilindriche verticali per i pilastri della struttura.
+</br>
+larKhalifaVerticalEnclosures(wingA = 0, wingB = 0, wingC = 0): genera pareti verticali (parametriche, vedi su) per la struttura.
+</br>
+Per realizzare il "vicinato" (esercizio3) ho definito:
+</br>
+skyscraper(dim) : genera complessi simpliciali 3D utilizzati per realizzare grattacieli.
+</br>
+Per realizzare il complesso urbano (esercizio4) ho definito:
+</br>
+FUNZIONI DI SUPPORTO GENERA LAMPIONE STRADALE: modifica di alcune funzioni primitive (mapper.py).
+</br>
+street_lamp(): genera i lampioni stradali 3D
+</br>
+street3D(): genera la strada 3D
+</br>
+tree(): genera alberi 3D
+</br>
+island(): genera un isola artificiale 3D
+</br>
+
+NOTE:
+</br>
+</body>
+
+</html>

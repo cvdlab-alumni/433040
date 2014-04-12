@@ -1,1 +1,1 @@
-NOTA: Il primo HW è stato per sbaglio inserito nella cartella Desktop
+NOTA: Il primo HW è stato per sbaglio inserito nella cartella Desktop\433040

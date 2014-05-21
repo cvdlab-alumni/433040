@@ -45,7 +45,7 @@ def Automatize(diagram, master, toMergeCells) :
             master = diagram2cell(diagram,master,k)
     hpc = SKEL_1(STRUCT(MKPOLS(master)))
     hpc = AutomatizeCellNumbering(master, hpc)
-    #VIEW(hpc)
+    VIEW(hpc)
     def Automatize0(toRemoveCells) :
         if(toRemoveCells == None) :
             #nothing to remove
@@ -53,7 +53,7 @@ def Automatize(diagram, master, toMergeCells) :
         else :
             V_final,CV_final = master
             hpcFinal = V_final, [cell for k,cell in enumerate(CV_final) if not (k in toRemoveCells)]
-            #DRAW(hpcFinal)
+            DRAW(hpcFinal)
             return hpcFinal
     return Automatize0
 #end

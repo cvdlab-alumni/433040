@@ -27,13 +27,37 @@ Link to project:
 Images:
 </br>
 </br>
-<a href="images/Scheletro_Casa.png"><img src="images/Scheletro_Casa.png" heigth="30%" width="30%"/>Master per l'abitazione di interesse (compreso pianerottolo).</a>
+<a href="images/skel_casa.png"><img src="images/skel_casa.png" heigth="30%" width="30%"/>Master per l'abitazione di interesse (compreso pianerottolo).</a>
 </br>
 </br>
-<a href="images/dwelling3D.png"><img src="images/dwelling3D.png" heigth="30%" width="30%"/>Appartamento (solido).</a>
+<a href="images/casa.png"><img src="images/casa.png" heigth="30%" width="30%"/>Appartamento (solido).</a>
 </br>
 </br>
-<a href="images/Palazzo_Completo.png"><img src="images/Palazzo_Completo.png" heigth="30%" width="30%"/>Complesso strutturale.</a>
+<a href="images/palazzo.png"><img src="images/palazzo.png" heigth="30%" width="30%"/>Complesso strutturale.</a>
+</br>
+</br>
+<a href="images/palazzoLato.png"><img src="images/palazzoLato.png" heigth="30%" width="30%"/>Complesso strutturale (lato).</a>
+</br>
+</br>
+<a href="images/palazzoTetto.png"><img src="images/palazzoTetto.png" heigth="30%" width="30%"/>Complesso strutturale (dall'alto).</a>
+</br>
+</br>
+<a href="images/skel_camera.png"><img src="images/skel_camera.png" heigth="30%" width="30%"/>Scheletro camera.</a>
+</br>
+</br>
+<a href="images/porta.png"><img src="images/porta.png" heigth="30%" width="30%"/>Dettagli: porta.</a>
+</br>
+</br>
+<a href="images/finestre.png"><img src="images/finestre.png" heigth="30%" width="30%"/>Dettagli: finestre.</a>
+</br>
+</br>
+<a href="images/camera.png"><img src="images/camera.png" heigth="30%" width="30%"/>Camera (solida).</a>
+</br>
+</br>
+<a href="images/balcone.png"><img src="images/balcone.png" heigth="30%" width="30%"/>Balcone cucina.</a>
+</br>
+</br>
+<a href="images/salotto.png"><img src="images/salotto.png" heigth="30%" width="30%"/>Salotto.</a>
 </br>
 </br>
 <a href="images/Ingresso.png"><img src="images/Ingresso.png" heigth="30%" width="30%"/>Interni: Ingresso.</a>
@@ -42,13 +66,10 @@ Images:
 <a href="images/Cucina.png"><img src="images/Cucina.png" heigth="30%" width="30%"/>Interni: Cucina.</a>
 </br>
 </br>
-<a href="images/Corridoio.png"><img src="images/Corridoio.png" heigth="30%" width="30%"/>Interni: Corridoio.</a>
+<a href="images/pianoTerra.png"><img src="images/pianoTerra.png" heigth="30%" width="30%"/>Ingresso complesso strutturale: piano terra.</a>
 </br>
 </br>
-<a href="images/PianoTerra.png"><img src="images/Corridoio.png" heigth="30%" width="30%"/>Ingresso complesso strutturale.</a>
-</br>
-</br>
-<a href="images/ScalePosteriori.png"><img src="images/ScalePosteriori.png" heigth="30%" width="30%"/>Scale posteriori complesso strutturale.</a>
+<a href="images/piano.png"><img src="images/piano.png" heigth="30%" width="30%"/>Un piano del complesso strutturale.</a>
 </br>
 </br>
 <b>Description: Exercise1</b></br>
@@ -59,22 +80,25 @@ AntoRoom(),VlaRoom(),NikRoom(),Ingresso(),Cucina(),Corridoio(),Bagno(),Balcone_C
 A questo punto, considerando ciascun blocco come Window e il diagramma finale, denominato "MasterDwelling", come ViewPort ho innestato al suo interno, dopo opportune trasformazioni Win-View (utilizzando talvolta ViewPort intermedi), tutti i diagrammi generati con le suddette funzioni. La funzione denominata "MasterDwelling()" effettua le suddette trasformazioni. 
 </br>
 </br><b>Description: Exercise2</b></br>
-In aggiunta alle funzioni precedentemente utilizzate per l'esercizio1 vi sono: MasterPalazzo(),spiralStair(thickness=0.2,R=1.,r=0.5,riser=0.1,pitch=2.,nturns=2.,steps=18),PareteVetro().
+In aggiunta alle funzioni precedentemente utilizzate per l'esercizio1 vi sono: MasterPalace(),RampaScale(),PareteVetro(),bezierMirror(),groundFloor().
 </br>
-PareteVetro() : Genera la vetrata presente sulla facciata sud dell'edificio.
+MasterPalace() : La funzione genera l'appartamento (oggetto d'esame) e lo colloca, attraverso una serie di trasformazioni opportune, in uno spazio 3D, replicandolo e orientandolo nella maniera corretta. Il prodotto finale sarà l'intero complesso strutturale in oggetto d'esame.
 </br>
-spiralStair(..args) : Genera una semplice scala elicoidale, posta sulla facciata sud dell'edificio.
-</br>
-MasterPalazzo() : La funzione genera l'appartamento (oggetto d'esame) e lo colloca, attraverso una serie di trasformazioni opportune, in uno spazio 3D, replicandolo e orientandolo nella maniera corretta. Il prodotto finale sarà l'intero complesso strutturale in oggetto d'esame.
+groundFloor() : E' la funzione utilizzata per rappresentare il piano terra del complesso strutturale. Al suo interno sono presenti le scale (funzione RampaScale()), uno specchio rappresentato tramite "<b>b-spline curve</b>" (funzione bezierMirror()), il vano ascensore e un quadro.
 </br>
 L'esercizio2 è stato risolto componendo in un'unica struttura (STRUCT) i prodotti delle singole suddette funzioni.
 </br>
 </br><b>Description: Exercise3</b></br>
 Per poter automatizzare il processo di "merging-numbering-elimination" ho pensato di definire una funzione del second'ordine denominata "Automatize(diagram, master, toMergeCells)(toRemoveCells)". Applicata parzialmente permette di effettuare il merge di un diagramma (in un diagramma "master") in più celle, mostrando la numerazione delle celle una volta terminata l'applicazione.
-Successivamente si potranno eliminare le celle attraverso il parametro "toRemoveCells". L'esercizio3 mostra una possibile applicazione della funzione "Automatize" in un contesto estratto da "test4.py": merge di una porta in due pareti di parallele. 
+Successivamente si potranno eliminare le celle attraverso il parametro "toRemoveCells". Si noti che applicando la funzione Automatize con parametri (None,master,None) si otterrà la numerazione delle celle di "master" e la visualizzazione dello stesso. L'esercizio3 mostra una possibile applicazione della funzione "Automatize" in un contesto estratto da "test4.py": merge di una porta in due pareti di parallele. 
 </br>
 </br><b>Description: Exercise4</b></br>
-Allo stato attuale, la definizione della funzione "diagram2cellNEW" non è completa. Necessita l'eliminazione dei vertici in comune a più faccie e l'aggiunta delli stessi dove mancano.
+Per la risoluzione dell'esercizio ho definito la funzione: diagram2cellNEW(diagram,master,cell). In ordine, vengono eseguite le seguenti operazioni:
+</br>
+Eliminazione della cella di interesse nel master
+</br>
+"Setaccio" vertici di 'master' e 'diagram' (funzione 'vertexSieve')
+</br>
+Sommo celle, risultato della funzione 'vertexSieve', per ottenere le celle finali
 </body>
-
 </html>

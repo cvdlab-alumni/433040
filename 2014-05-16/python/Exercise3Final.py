@@ -19,10 +19,11 @@ DRAW = COMP([VIEW,STRUCT,MKPOLS])
 
 #Def Automatize function
 def Automatize(diagram, master, toMergeCells) :
-    ToMerge=list.sort(toMergeCells)
-    ToMerge=list.reverse(toMergeCells)	
-    for k in toMergeCells:
-        master = diagram2cell(diagram,master,k)
+    if not(toMergeCells == None):
+        ToMerge=list.sort(toMergeCells)
+        ToMerge=list.reverse(toMergeCells)	
+        for k in toMergeCells:
+            master = diagram2cell(diagram,master,k)
     hpc = SKEL_1(STRUCT(MKPOLS(master)))
     hpc = AutomatizeCellNumbering(master, hpc)
     VIEW(hpc)

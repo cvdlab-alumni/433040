@@ -1,0 +1,267 @@
+<!-- @Author: Nicola Russo -->
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>Robot3js</title> 
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats {  /* Align stats top-left */
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+  </style> 
+  </head> 
+  <body>
+    <!-- JavaScript libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script src="assets/libs/TrackballControls.js"></script>
+    <script src="assets/libs/robotBuilder.js"></script>
+    <script>
+      // once everything is loaded, we run our Three.js stuff.
+      $(function () {
+        var stats = initStats();
+       
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        var trackballControls = new THREE.TrackballControls(camera);
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE,1.0));
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        // position and point the camera to the center of the scene
+        camera.position.set(0, 20, 20);
+        camera.up = new THREE.Vector3(0,1,0);
+        camera.lookAt(scene.position);
+
+        // add subtle ambient lighting
+        var ambiColor = "#0c0c0c";
+        var ambientLight = new THREE.AmbientLight(ambiColor);
+        scene.add(ambientLight);
+
+        // add directional light 
+        var lightColor = "#ffffff";
+        var directionalLight = new THREE.DirectionalLight(lightColor);
+        directionalLight.position.set(0, 0, 100);
+        directionalLight.intensity = 1;
+        scene.add(directionalLight);
+
+        //make robot arms
+        var arm_dx = mkRobotArm(1,6);
+        var arm_sx = mkRobotArm(1,6);
+        arm_dx.rotation.z = Math.PI/2;
+        arm_sx.rotation.z = -Math.PI/2;
+
+        //make robot legs
+        leg_dx = mkRobotLeg(1,6);
+        leg_sx = mkRobotLeg(1,6);
+        leg_dx.rotation.z = Math.PI;
+        leg_sx.rotation.z = Math.PI;
+
+        //make robot body and head
+        var body = mkRobotBody(2,8);
+        
+        //assembly robot
+        body.hook_tr.add(arm_dx);
+        body.hook_tl.add(arm_sx);
+        body.hook_br.add(leg_dx);
+        body.hook_bl.add(leg_sx);
+        scene.add(body);
+
+
+        // add the output of the renderer to the html element
+        $('body').append(renderer.domElement);
+
+        var controls = new function () {
+          
+          //body
+          this.X = 0.0;
+          this.Y = 0.0;
+          this.Z = 0.0;
+
+          //right arm
+          this.arm_dx = 0.0;
+          this.shoulder_dx = 0.0;
+          this.forearm_dx = 0.0;
+          this.hand_dx = 0.0;
+          this.fingerA_dx = 0.0;
+          this.fingerA_flexor_dx = 0.0;
+          this.fingerB_dx = 0.9;
+          this.fingerB_flexor_dx = 0.7;
+          
+          //left arm
+          this.arm_sx = 0.0;
+          this.shoulder_sx = 0.0;
+          this.forearm_sx = 0.0;
+          this.hand_sx = 0.0;
+          this.fingerA_sx = 0.0;
+          this.fingerA_flexor_sx = 0.0;
+          this.fingerB_sx = 0.9;
+          this.fingerB_flexor_sx = 0.7;
+
+          //right leg
+          this.leg_dx = 0.0;
+          this.hip_dx = 0.0;
+          this.tibia_dx = 0.0;
+          this.knee_dx = 0.0;
+          this.foot_dx = 0.0;
+          this.ankle_dx = 0.0;
+          
+          //left leg
+          this.leg_sx = 0.0;
+          this.hip_sx = 0.0;
+          this.tibia_sx = 0.0;
+          this.knee_sx = 0.0;
+          this.foot_sx = 0.0;
+          this.ankle_sx = 0.0;
+        };
+
+        var gui = new dat.GUI();
+        
+        //body
+        var bodyContent = gui.addFolder('Body');
+        bodyContent.add(controls, 'Y', -2/3*Math.PI, 2/5*Math.PI).onChange(function (value) {
+          body.trunk.rotation.y = value; 
+        });
+        bodyContent.add(controls, 'X', -Math.PI/12, -Math.PI/12).onChange(function (value) {
+          body.trunk.rotation.x = value; 
+        });
+        bodyContent.add(controls, 'Z', -Math.PI/12, Math.PI/12).onChange(function (value) {
+          body.trunk.rotation.z = value; 
+        });
+
+        //right arm
+        var arm_r = gui.addFolder('Right Arm');
+        arm_r.add(controls, 'arm_dx', -2/3*Math.PI, 2/5*Math.PI).onChange(function (value) {
+          arm_dx.rotation.y = value; 
+        });
+        arm_r.add(controls, 'shoulder_dx', -2/3*Math.PI, 1/3*Math.PI).onChange(function (value) {
+          arm_dx.sphere.rotation.z = value; 
+        });
+
+        arm_r.add(controls, 'forearm_dx', 0.0, 2*Math.PI).onChange(function (value) {
+          arm_dx.avambraccio.rotation.y = value; 
+        });
+        arm_r.add(controls, 'hand_dx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_dx.avambraccio.sphere.rotation.x = value; 
+        });
+
+        arm_r.add(controls, 'fingerA_dx', 0.0, Math.PI*2).onChange(function (value) {
+          arm_dx.dito0.rotation.y = value; 
+        });
+        arm_r.add(controls, 'fingerA_flexor_dx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_dx.dito0.sphere.rotation.x = value; 
+        });
+
+        arm_r.add(controls, 'fingerB_dx', 0.0, 2*Math.PI).onChange(function (value) {
+          arm_dx.dito1.rotation.y = value; 
+        });
+        arm_r.add(controls, 'fingerB_flexor_dx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_dx.dito1.sphere.rotation.x = value; 
+        });
+
+        //left arm
+        var arm_r = gui.addFolder('Left Arm');
+        arm_r.add(controls, 'arm_sx', -2/3*Math.PI, 2/5*Math.PI).onChange(function (value) {
+          arm_sx.rotation.y = value; 
+        });
+        arm_r.add(controls, 'shoulder_sx', -2/3*Math.PI, 1/3*Math.PI).onChange(function (value) {
+          arm_sx.sphere.rotation.z = value; 
+        });
+
+        arm_r.add(controls, 'forearm_sx', 0.0, 2*Math.PI).onChange(function (value) {
+          arm_sx.avambraccio.rotation.y = value; 
+        });
+        arm_r.add(controls, 'hand_sx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_sx.avambraccio.sphere.rotation.x = value; 
+        });
+
+        arm_r.add(controls, 'fingerA_sx', 0.0, Math.PI*2).onChange(function (value) {
+          arm_sx.dito0.rotation.y = value; 
+        });
+        arm_r.add(controls, 'fingerA_flexor_sx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_sx.dito0.sphere.rotation.x = value; 
+        });
+
+        arm_r.add(controls, 'fingerB_sx', 0.0, 2*Math.PI).onChange(function (value) {
+          arm_sx.dito1.rotation.y = value; 
+        });
+        arm_r.add(controls, 'fingerB_flexor_sx', 0.0, Math.PI/2).onChange(function (value) {
+          arm_sx.dito1.sphere.rotation.x = value; 
+        });
+
+        //right leg
+        var leg_r = gui.addFolder('Right Leg');
+        leg_r.add(controls, 'leg_dx', -2/3*Math.PI, 2/5*Math.PI).onChange(function (value) {
+          leg_dx.rotation.y = value; 
+        });
+        leg_r.add(controls, 'hip_dx', -2/3*Math.PI, 1/3*Math.PI).onChange(function (value) {
+          leg_dx.sphere.rotation.z = value; 
+        });
+
+        leg_r.add(controls, 'tibia_dx', 0.0, 2*Math.PI).onChange(function (value) {
+          leg_dx.tibia.rotation.y = value; 
+        });
+        leg_r.add(controls, 'knee_dx', 0.0, Math.PI/2).onChange(function (value) {
+          leg_dx.tibia.sphere.rotation.x = value; 
+        });
+
+        leg_r.add(controls, 'foot_dx', 0.0, Math.PI*2).onChange(function (value) {
+          leg_dx.piede.rotation.y = value; 
+        });
+        leg_r.add(controls, 'ankle_dx', 0.0, Math.PI/2).onChange(function (value) {
+          leg_dx.piede.sphere.rotation.x = value; 
+        });
+
+        //left leg
+        var leg_l = gui.addFolder('Left Leg');
+        leg_l.add(controls, 'leg_sx', -2/3*Math.PI, 2/5*Math.PI).onChange(function (value) {
+          leg_sx.rotation.y = value; 
+        });
+        leg_l.add(controls, 'hip_sx', -2/3*Math.PI, 1/3*Math.PI).onChange(function (value) {
+          leg_sx.sphere.rotation.z = value; 
+        });
+
+        leg_l.add(controls, 'tibia_sx', 0.0, 2*Math.PI).onChange(function (value) {
+          leg_sx.tibia.rotation.y = value; 
+        });
+        leg_l.add(controls, 'knee_sx', 0.0, Math.PI/2).onChange(function (value) {
+          leg_sx.tibia.sphere.rotation.x = value; 
+        });
+
+        leg_l.add(controls, 'foot_sx', 0.0, Math.PI*2).onChange(function (value) {
+          leg_sx.piede.rotation.y = value; 
+        });
+        leg_l.add(controls, 'ankle_sx', 0.0, Math.PI/2).onChange(function (value) {
+          leg_sx.piede.sphere.rotation.x = value; 
+        });
+
+        function render() {
+          stats.update();
+          trackballControls.update();
+          // render using requestAnimationFrame
+          requestAnimationFrame(render);
+          renderer.render(scene, camera);
+        }
+
+        function initStats() {
+          var stats = new Stats();
+          stats.setMode(0); // 0: fps, 1: ms
+          $('body').append(stats.domElement);
+          return stats;
+        }
+
+        render();
+      });
+    </script>
+ </body>
+</html>

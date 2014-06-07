@@ -9,25 +9,25 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 
 	var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
 	//color: Green
-	var material = new THREE.MeshPhongMaterial( {color: 0x00cc00, specular: 0x00cc00 } );
+	var material = new THREE.MeshPhongMaterial( {color: 0x00cc00, specular: 0x00cc00 , metal: true, side: THREE.FrontSide} );
 	var surface = new THREE.Mesh( geometry, material );
-	surface.castShadow = true;
+	//surface.castShadow = true;
 	surface.receiveShadow = true;
 
 	var geometry = new THREE.SphereGeometry( 1, 32, 32 );
-	var material = new THREE.MeshLambertMaterial( {color: 0x99FFFF} );
+	var material = new THREE.MeshPhongMaterial( {color: 0x99FFFF, specular: 0x99FFFF , metal: true, side: THREE.DoubleSide} );
 	var sphere1 = new THREE.Mesh( geometry, material );
 	sphere1.castShadow = true;
 	//sphere1.receiveShadow = true;
 
 	var geometry1 = new THREE.SphereGeometry( 1, 32, 32 );
-	var material1 = new THREE.MeshLambertMaterial( {color: 0xFF0000} );
+	var material1 = new THREE.MeshPhongMaterial( {color: 0xFF0000, specular: 0xFF0000 , metal: true, side: THREE.DoubleSide} );
 	var sphere2 = new THREE.Mesh( geometry1, material1 );
 	sphere2.castShadow = true;
 	sphere2.receiveShadow = true;
 
 	//mk legs
-	var mat = new THREE.MeshLambertMaterial( {color: 0x996633} );
+	var mat = new THREE.MeshPhongMaterial( {color: 0x996633, specular: 0x996633 , metal: true, side: THREE.DoubleSide} );
 	var geom = new THREE.BoxGeometry(1, 1, 8, 10, 10, 10);
 	
 	var leg0 = new THREE.Mesh(geom,mat);
@@ -65,14 +65,21 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 	return surface
 }
 /*
-crea pavimento a scacchiera
+crea pavimento in legno
 */
 function mkFloor(width, height) {
-	var plane = createMesh(new THREE.PlaneGeometry(1000, 1000), "bathroom.jpg");
+	var plane = createMesh(new THREE.PlaneGeometry(width, height), "floor-wood.jpg");
 	return plane;
 }
+/*
+crea muro in mattoncini
+*/
+function mkWall(width, height) {
+	var wall = createMesh(new THREE.PlaneGeometry(width, height), "stone-bump.jpg");
+	return wall;
+}
 
- function createMesh(geom, imageFile) {
+function createMesh(geom, imageFile) {
         var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + imageFile)
         var mat = new THREE.MeshPhongMaterial();
         mat.map = texture;
@@ -150,11 +157,11 @@ function mkCeiling(colorLight) {
 	var spotlight = new THREE.SpotLight(colorLight, 2);
 	spotlight.castShadow = true;
 	spotlight.position.set(0,0,0.2);
-	spotlight.shadowCameraVisible = true;
+	//spotlight.shadowCameraVisible = true;
 	spotlight.shadowCameraNear = 1;
-	spotlight.shadowMapWitdh = 1024;
-	spotlight.shadowMapHeight = 1024;
-	spotlight.shadowCameraFOV = 600
+	// spotlight.shadowMapWitdh = 512;
+	// spotlight.shadowMapHeight = 512;
+	// spotlight.shadowCameraFOV = 600
 	spotlight.angle = Math.PI/2
 
 	var lightTarget = new THREE.Object3D();
@@ -173,6 +180,9 @@ function mkCeiling(colorLight) {
 	var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 	sphere.add(plafoniera);
 	pivot.add(sphere);
+
+	//set property
+	pivot.spotlight = spotlight;
 
 	return pivot;
 }

@@ -46,8 +46,8 @@
         camera.lookAt(scene.position);
 
 
-        // var axis = new THREE.AxisHelper(5000);
-        // scene.add(axis);
+        var axis = new THREE.AxisHelper(5000);
+        scene.add(axis);
 
         // add subtle ambient lighting
         var ambiColor = "#0c0c0c";
@@ -62,12 +62,16 @@
          scene.add(directionalLight);
 
         //assembly ambient
-        var surface = mkDesk3D(17, 26, 1, 18, 18, 0);
+        var surface = mkDesk3D(17, 26, 1, 8, 7, 8);
         scene.add(surface);
 
         var lamp = mkLamp(0,0xffffff);
         lamp.position.z = 0.5;
         scene.add(lamp);
+
+        var floor = mkFloor(100,100);
+        floor.position.z = -6;
+        scene.add(floor);
 
         // add the output of the renderer to the html element
         $('body').append(renderer.domElement);
@@ -139,34 +143,23 @@
         tween6.delay(18006);
         tween6.start();
 
-        //tween red ball bouncing
-        var position9 =  {x:0,y:-5,z:7};
-        var _target9 =  {x:0,y:-5,z:1.5};
-        var tween9 = new TWEEN.Tween(position9).to(_target9, 3500);
-        tween9.onUpdate(function(){ 
-          surface.sphereRed.position.x = position9.x;
-          surface.sphereRed.position.y = position9.y;
-          surface.sphereRed.position.z = position9.z;
-        });
-        tween9.delay(20507);
-        tween9.easing(TWEEN.Easing.Bounce.Out);
-        tween9.start();
-
         //tween blue ball on y
         var position7 = surface.sphereBlue.position;
         var _target7 = { y: -3 };
         var tween7 = new TWEEN.Tween(position7).to(_target7, 2500);
 
-        tween7.delay(24007);
+        tween7.delay(20507);
         tween7.start();
 
         //tween blue ball on x
         var position8 = surface.sphereBlue.position;
         var _target8 = { x: 0 };
         var tween8 = new TWEEN.Tween(position8).to(_target8, 2500);
-        tween8.delay(26508);
+        tween8.delay(23007);
         tween8.start();
 
+
+        
         var controls = new function () {
           this.alpha = 0.0;
           this.beta = Math.PI/4;
@@ -175,21 +168,6 @@
           this.epsilon = Math.PI/8;
           this.x = 0.0;
           this.y = 11.0;
-          this.switch_OFF = false;
-        };
-
-        var turnOnOffLight = function () {
-          if(controls.switch_OFF === true)
-          {
-            lamp.ceiling.spotlight.intensity = 0;
-              surface.sphereBlue.castShadow = false;
-              surface.sphereRed.castShadow = false;
-          }
-          else {
-            lamp.ceiling.spotlight.intensity = 2;
-            surface.sphereBlue.castShadow = true;
-            surface.sphereRed.castShadow = true;
-          }
         };
 
         //create gui and embed controls
@@ -219,7 +197,6 @@
         bodyContent.add(controls, 'y', -11, 11).onChange(function (value) {
            lamp.position.y = value; 
         });
-        bodyContent.add(controls, 'switch_OFF').onChange(turnOnOffLight);
 
         function render() {
           stats.update();

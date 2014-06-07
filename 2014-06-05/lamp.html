@@ -1,0 +1,218 @@
+<!-- @Author: Nicola Russo -->
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title></title> 
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats {  /* Align stats top-left */
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+  </style> 
+  </head> 
+  <body>
+    <!-- JavaScript libraries -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/stats.js/r11/Stats.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script src="assets/libs/TrackballControls.js"></script>
+    <script src="assets/libs/robotBuilder.js"></script>
+    <script src="assets/libs/OfficeBuilder.js"></script>
+    <script src="assets/libs/tween.min.js"></script>
+    <script>
+      // once everything is loaded, we run our Three.js stuff.
+      $(function () {
+        var stats = initStats();
+       
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        var trackballControls = new THREE.TrackballControls(camera);
+
+        renderer.setClearColor(new THREE.Color(0xEEEEEE,1.0));
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMapEnabled = true;
+
+        // position and point the camera to the center of the scene
+        camera.position.set(-36, -40, 0);
+        camera.up = new THREE.Vector3(0,0,1);
+        camera.lookAt(scene.position);
+
+
+        var axis = new THREE.AxisHelper(5000);
+        scene.add(axis);
+
+        // add subtle ambient lighting
+        var ambiColor = "#0c0c0c";
+        var ambientLight = new THREE.AmbientLight(ambiColor);
+        scene.add(ambientLight);
+
+        // add directional light 
+         var lightColor = "#ffffff";
+         var directionalLight = new THREE.DirectionalLight(lightColor);
+         directionalLight.position.set(-100, -100, 0);
+         directionalLight.intensity = 1;
+         scene.add(directionalLight);
+
+        //assembly ambient
+        var surface = mkDesk3D(17, 26, 1, 8, 7, 8);
+        scene.add(surface);
+
+        var lamp = mkLamp(0,0xffffff);
+        lamp.position.z = 0.5;
+        scene.add(lamp);
+
+        // add the output of the renderer to the html element
+        $('body').append(renderer.domElement);
+
+        //tween camera
+        var position = { x : -36, y: -40 };
+        var _target = { x : -24, y: -30, z: 23};
+        var tween = new TWEEN.Tween(position).to(_target, 4000);
+        tween.onUpdate(function(){ 
+          camera.position.x = position.x;
+          camera.position.y = position.y;
+          camera.position.z = position.z;
+        });
+        tween.start();
+
+        //tween lamp
+        var position1 = { x : 0, y: 0 };
+        var _target1 = { x : 0, y: 11, z: 0};
+        var tween1 = new TWEEN.Tween(position1).to(_target1, 3000);
+        tween1.onUpdate(function(){ 
+          lamp.position.x = position1.x;
+          lamp.position.y = position1.y;
+        });
+        tween1.delay(4001);
+        tween1.start();
+
+        //tween rotate lamp beta
+        var position2 = lamp.arm0.rotation;
+        var _target2 = { x: Math.PI/4};
+        var tween2 = new TWEEN.Tween(position2).to(_target2, 2500);
+        tween2.delay(7002);
+        tween2.start();
+
+        //tween camera 2
+        var position5 = { x : -24, y: -30, z:23};
+        var _target5 = { x : 0, y: 30, z: 23};
+        var tween5 = new TWEEN.Tween(position5).to(_target5, 3000);
+        tween5.onUpdate(function(){ 
+          camera.position.x = position5.x;
+          camera.position.y = position5.y;
+          camera.position.z = position5.z;
+        });
+        tween5.delay(9503);
+        tween5.start();
+
+        //tween rotate lamp gamma
+        var position3 = lamp.arm1.rotation;
+        var _target3 = { x: Math.PI/4};
+        var tween3 = new TWEEN.Tween(position3).to(_target3, 2500);
+        tween3.delay(12504);
+        tween3.start();
+
+        //tween rotate lamp epsilon
+        var position4 = lamp.ceiling.rotation;
+        var _target4 = { x: Math.PI/8};
+        var tween4 = new TWEEN.Tween(position4).to(_target4, 2500);
+        tween4.delay(15005);
+        tween4.start();
+
+        //tween camera 3
+        var position6 = { x : 0, y: 30, z: 23};
+        var _target6 = { x : -30, y: 0, z: 23};
+        var tween6 = new TWEEN.Tween(position6).to(_target6, 2500);
+        tween6.onUpdate(function(){ 
+          camera.position.x = position6.x;
+          camera.position.y = position6.y;
+          camera.position.z = position6.z;
+        });
+        tween6.delay(18006);
+        tween6.start();
+
+        //tween blue ball on y
+        var position7 = surface.sphereBlue.position;
+        var _target7 = { y: -3 };
+        var tween7 = new TWEEN.Tween(position7).to(_target7, 2500);
+
+        tween7.delay(20507);
+        tween7.start();
+
+        //tween blue ball on x
+        var position8 = surface.sphereBlue.position;
+        var _target8 = { x: 0 };
+        var tween8 = new TWEEN.Tween(position8).to(_target8, 2500);
+        tween8.delay(23007);
+        tween8.start();
+
+
+        
+        var controls = new function () {
+          this.alpha = 0.0;
+          this.beta = Math.PI/4;
+          this.gamma = Math.PI/4;
+          this.delta = 0.0;
+          this.epsilon = Math.PI/8;
+          this.x = 0.0;
+          this.y = 11.0;
+        };
+
+        //create gui and embed controls
+        var gui = new dat.GUI();
+        
+        var bodyContent = gui.addFolder('Degrees of freedom');
+        bodyContent.add(controls, 'alpha', 0, 2*Math.PI).onChange(function (value) {
+           lamp.basePivot.rotation.y = value; 
+        });
+        bodyContent.add(controls, 'beta', 0, Math.PI/2).onChange(function (value) {
+           lamp.arm0.rotation.x = value; 
+        });
+        bodyContent.add(controls, 'gamma', 0, Math.PI/2).onChange(function (value) {
+           lamp.arm1.rotation.x = value; 
+        });
+        bodyContent.add(controls, 'delta', 0, Math.PI*2).onChange(function (value) {
+           lamp.arm1.sphere.rotation.y = value; 
+        });
+        bodyContent.add(controls, 'epsilon', 0, Math.PI/2).onChange(function (value) {
+           lamp.ceiling.rotation.x = value; 
+        });
+
+        var bodyContent = gui.addFolder('Lamp controls');
+        bodyContent.add(controls, 'x', -6.5, 6.5).onChange(function (value) {
+           lamp.position.x = value; 
+        });
+        bodyContent.add(controls, 'y', -11, 11).onChange(function (value) {
+           lamp.position.y = value; 
+        });
+
+        function render() {
+          stats.update();
+          trackballControls.update();
+          TWEEN.update();
+
+          // render using requestAnimationFrame
+          requestAnimationFrame(render);
+          renderer.render(scene, camera);
+        }
+
+        function initStats() {
+          var stats = new Stats();
+          stats.setMode(0); // 0: fps, 1: ms
+          $('body').append(stats.domElement);
+          return stats;
+        }
+
+        render();
+      });
+    </script>
+ </body>
+</html>

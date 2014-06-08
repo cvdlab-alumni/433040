@@ -26,6 +26,9 @@
     <script src="assets/libs/robotBuilder.js"></script>
     <script src="assets/libs/OfficeBuilder.js"></script>
     <script src="assets/libs/tween.min.js"></script>
+    <script type="text/javascript" src="assets/fonts/helvetiker_regular.typeface.js"></script> 
+    <script type="text/javascript" src="assets/fonts/helvetiker_bold.typeface.js"></script> 
+    <script type="text/javascript" src="assets/fonts/bitstream_vera_sans_mono_roman.typeface.js"></script>
     <script>
       // once everything is loaded, we run our Three.js stuff.
       $(function () {
@@ -41,13 +44,13 @@
         renderer.shadowMapEnabled = true;
 
         // position and point the camera to the center of the scene
-        camera.position.set(-36, -40, 0);
+        camera.position.set(48, 32, 15);
         camera.up = new THREE.Vector3(0,0,1);
-        camera.lookAt(scene.position);
+        camera.lookAt(10,10,10);
 
 
-        // var axis = new THREE.AxisHelper(5000);
-        // scene.add(axis);
+        var axis = new THREE.AxisHelper(5000);
+        scene.add(axis);
 
         // add subtle ambient lighting
         var ambiColor = "#0c0c0c";
@@ -68,6 +71,26 @@
         var lamp = mkLamp(0,0xffffff);
         lamp.position.z = 0.5;
         scene.add(lamp);
+
+        //make mirror
+        var box = new THREE.BoxGeometry(40, 1.5, 80, 1, 1, 1);
+        var material = new THREE.MeshPhongMaterial( {color: 0x0033FF, specular: 0x0033FF , metal: true, side: THREE.FrontSide} );
+        var cubeGeom = new THREE.BoxGeometry(35, 2, 75, 1, 1, 1);
+        var mirrorCornice = new THREE.Mesh(box,material);
+        mirrorCubeCamera = new THREE.CubeCamera( 0.5, 500, 1024);
+        mirrorCubeCamera.lookAt(scene.position);
+        scene.add( mirrorCubeCamera );
+        var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget , shininess: 80} );
+        mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
+        //mirrorCube.rotation.x = Math.PI/2;
+        mirrorCube.position.set(-34,-38,4);
+        mirrorCubeCamera.position = mirrorCube.position;
+        mirrorCube.add(mirrorCornice);
+        mirrorCube.rotation.x = Math.PI/2;
+        mirrorCube.rotation.z = -Math.PI/2;
+        mirrorCube.rotation.y = Math.PI/4;
+        scene.add(mirrorCube);
+        
 
         // add the output of the renderer to the html element
         $('body').append(renderer.domElement);
@@ -129,7 +152,7 @@
 
         //tween camera 3
         var position6 = { x : 0, y: 30, z: 23};
-        var _target6 = { x : -30, y: 0, z: 23};
+        var _target6 = { x : 20, y: 10, z: 8};
         var tween6 = new TWEEN.Tween(position6).to(_target6, 2500);
         tween6.onUpdate(function(){ 
           camera.position.x = position6.x;
@@ -167,6 +190,16 @@
         tween8.delay(26508);
         tween8.start();
 
+        //final tween
+        var positionF = lamp.basePivot.rotation;
+        var _targetF = { y: 5.99};
+        var tweenF = new TWEEN.Tween(positionF).to(_targetF, 500);
+        tweenF.delay(29009);
+        tweenF.start();
+
+        //text var
+        var text1;
+
         var controls = new function () {
           this.alpha = 0.0;
           this.beta = Math.PI/4;
@@ -176,7 +209,63 @@
           this.x = 0.0;
           this.y = 11.0;
           this.switch_OFF = false;
-        };
+          //text properties
+          this.size = 1;
+          this.height = 1;
+          this.bevelThickness = 0;
+          this.bevelSize = 0;
+          this.bevelEnabled = true;
+          this.bevelSegments = 3;
+          this.bevelEnabled = true;
+          this.curveSegments = 12;
+          this.steps = 1;
+          this.font = "helvetiker";
+          this.weight = "normal";
+          // this.style = "italics";
+
+          this.asGeom = function () {
+            // remove the old text
+            scene.remove(text1);
+            // create a new one
+
+            var options = {
+              size: controls.size,
+              height: controls.height,
+              weight: controls.weight,
+              font: controls.font,
+              bevelThickness: controls.bevelThickness,
+              bevelSize: controls.bevelSize,
+              bevelSegments: controls.bevelSegments,
+              bevelEnabled: controls.bevelEnabled,
+              curveSegments: controls.curveSegments,
+              steps: controls.steps
+            }
+
+            //console.log(THREE.FontUtils.faces);
+            text1 = createMesh(new THREE.TextGeometry("Nicola Russo - 433040", options));
+            text1.position.z = 1;
+            text1.position.x = 5;
+            text1.rotation.x = Math.PI/2;
+            text1.rotation.y = Math.PI/2;
+            text1.position.x = -7;
+            text1.position.y = -13;
+            scene.add(text1);
+              }
+
+            };
+
+        controls.asGeom();
+
+        function createMesh(geom) {
+          // assign two materials
+          // var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
+          // var meshMaterial = new THREE.MeshNormalMaterial();
+          var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xff5555, shininess: 100, metal: true});
+          // meshMaterial.side=THREE.DoubleSide;
+          // create a multimaterial
+          var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
+          return plane;
+        }
 
         var turnOnOffLight = function () {
           if(controls.switch_OFF === true)
@@ -221,11 +310,25 @@
         });
         bodyContent.add(controls, 'switch_OFF').onChange(turnOnOffLight);
 
+        var bodyContent = gui.addFolder('Text settings');
+        bodyContent.add(controls, 'size', 0, 200).onChange(controls.asGeom);
+        bodyContent.add(controls, 'height', 0, 200).onChange(controls.asGeom);
+        bodyContent.add(controls, 'font', ['bitstream vera sans mono', 'helvetiker']).onChange(controls.asGeom);
+        bodyContent.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
+        bodyContent.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
+        bodyContent.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
+        bodyContent.add(controls, 'bevelEnabled').onChange(controls.asGeom);
+        bodyContent.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
+        bodyContent.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
+
         function render() {
           stats.update();
           trackballControls.update();
           TWEEN.update();
 
+          mirrorCube.visible = false;
+          mirrorCubeCamera.updateCubeMap( renderer, scene );
+          mirrorCube.visible = true;
           // render using requestAnimationFrame
           requestAnimationFrame(render);
           renderer.render(scene, camera);

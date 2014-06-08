@@ -9,13 +9,13 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 
 	var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
 	//color: Green
-	var material = new THREE.MeshPhongMaterial( {color: 0x00cc00, specular: 0x00cc00 , metal: true, side: THREE.FrontSide} );
+	var material = new THREE.MeshPhongMaterial( {color: 0x0033FF, specular: 0x0033FF , side: THREE.FrontSide, metal: true} );
 	var surface = new THREE.Mesh( geometry, material );
 	//surface.castShadow = true;
 	surface.receiveShadow = true;
 
 	var geometry = new THREE.SphereGeometry( 1, 32, 32 );
-	var material = new THREE.MeshPhongMaterial( {color: 0x99FFFF, specular: 0x99FFFF , metal: true, side: THREE.DoubleSide} );
+	var material = new THREE.MeshPhongMaterial( {color: 0x009933, specular: 0x009933 , metal: true, side: THREE.DoubleSide} );
 	var sphere1 = new THREE.Mesh( geometry, material );
 	sphere1.castShadow = true;
 	//sphere1.receiveShadow = true;
@@ -27,7 +27,7 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 	sphere2.receiveShadow = true;
 
 	//mk legs
-	var mat = new THREE.MeshPhongMaterial( {color: 0x996633, specular: 0x996633 , metal: true, side: THREE.DoubleSide} );
+	var mat = new THREE.MeshPhongMaterial( {color: 0x999999, specular: 0x999999 , metal: true, side: THREE.DoubleSide} );
 	var geom = new THREE.BoxGeometry(1, 1, 8, 10, 10, 10);
 	
 	var leg0 = new THREE.Mesh(geom,mat);
@@ -64,6 +64,25 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 
 	return surface
 }
+
+/*
+Crea pavimento a scacchiera (tile/tween = 8:1). TODO: ricorsione
+*/
+/*function mkChessFloor(tileWitdh, tileHeight, tween) {
+
+	var tileGeom = new THREE.BoxGeometry(tileWitdh,tileHeight,0.1);
+	var floorSide = tile.x;
+	var floor = tile;
+	for (var i = 0; i === tween; i++) {
+		var materialBlack = new THREE.MeshPhongMaterial( {color: 0x000000, specular: 0x000000 , side: THREE.FrontSide, metal: true} );
+		var materialWhite = new THREE.MeshPhongMaterial( {color: 0xffffff, specular: 0xffffff , side: THREE.FrontSide, metal: true} );
+		//make 7 face
+		var surfaceA = new THREE.Mesh( tileGeom, material );
+		surface.receiveShadow = true;
+		floor.add(surface);
+
+	};
+}*/
 /*
 crea pavimento in legno
 */
@@ -143,7 +162,7 @@ function mkCeiling(colorLight) {
 	plafoniera.rotation.x = Math.PI/2
 
 	var bulbGeometry = new THREE.SphereGeometry(0.2,32,32);
-	var bulbMaterial = new THREE.MeshPhongMaterial({color: 0xffef47, transparent:true, opacity:0.5,  wireframe: false});
+	var bulbMaterial = new THREE.MeshPhongMaterial({color: 0xFFFF00, transparent:true, opacity:0.7,  wireframe: false});
 	var bulb = new THREE.Mesh(bulbGeometry,bulbMaterial);
 	var cilindroGeometry = new THREE.CylinderGeometry(0.1,0.2,0.5,16);
 	var cilindroMaterial = new THREE.MeshPhongMaterial({color:0x7a7a7a});
@@ -159,15 +178,19 @@ function mkCeiling(colorLight) {
 	spotlight.position.set(0,0,0.2);
 	//spotlight.shadowCameraVisible = true;
 	spotlight.shadowCameraNear = 1;
-	// spotlight.shadowMapWitdh = 512;
-	// spotlight.shadowMapHeight = 512;
-	// spotlight.shadowCameraFOV = 600
 	spotlight.angle = Math.PI/2
 
 	var lightTarget = new THREE.Object3D();
 	lightTarget.position.set(0,0,-6);
 	bulb.add(lightTarget);
 	spotlight.target = lightTarget;
+
+	//add pointlight for ceiling
+	var pointColor = "#ccffcc";
+  	var pointLight = new THREE.PointLight(pointColor);
+  	pointLight.distance = 2.5;
+  	pointLight.position = bulb.position;
+  	bulb.add(pointLight);
 
 	//assembly ceiling
 	bulb.add(spotlight);
@@ -187,6 +210,14 @@ function mkCeiling(colorLight) {
 	return pivot;
 }
 
+/*
+crea specchio
+*/
+function mkMirror(width,height) {
+
+
+
+}
 
 /*
 Restituisce un join tra una sfera e 2 cilindro + hook.

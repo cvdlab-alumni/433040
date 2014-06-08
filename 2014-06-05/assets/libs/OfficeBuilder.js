@@ -66,23 +66,32 @@ function mkDesk3D(width, height, depth, widthSegments, heightSegments, depthSegm
 }
 
 /*
-Crea pavimento a scacchiera (tile/tween = 8:1). TODO: ricorsione
+Crea pavimento a scacchiera
 */
-/*function mkChessFloor(tileWitdh, tileHeight, tween) {
+function mkCheckerboardFloor(Witdh, Height) {
 
-	var tileGeom = new THREE.BoxGeometry(tileWitdh,tileHeight,0.1);
-	var floorSide = tile.x;
-	var floor = tile;
-	for (var i = 0; i === tween; i++) {
-		var materialBlack = new THREE.MeshPhongMaterial( {color: 0x000000, specular: 0x000000 , side: THREE.FrontSide, metal: true} );
-		var materialWhite = new THREE.MeshPhongMaterial( {color: 0xffffff, specular: 0xffffff , side: THREE.FrontSide, metal: true} );
-		//make 7 face
-		var surfaceA = new THREE.Mesh( tileGeom, material );
-		surface.receiveShadow = true;
-		floor.add(surface);
+	// Geometry
+	var cbgeometry = new THREE.PlaneGeometry( Witdh, Height, 8, 8 );
 
-	};
-}*/
+	// Materials
+	var cbmaterials = []; 
+
+	cbmaterials.push( new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide }) );
+	cbmaterials.push( new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.DoubleSide }) );
+
+	var l = cbgeometry.faces.length / 2; // <-- Right here. This should still be 8x8 (64)
+
+	for( var i = 0; i < l; i ++ ) {
+    	j = i * 2; // <-- Added this back so we can do every other 'face'
+    	cbgeometry.faces[ j ].materialIndex = ((i + Math.floor(i/8)) % 2); // The code here is changed, replacing all 'i's with 'j's. KEEP THE 8
+    	cbgeometry.faces[ j + 1 ].materialIndex = ((i + Math.floor(i/8)) % 2); // Add this line in, the material index should stay the same, we're just doing the other half of the same face
+	}
+
+	// Mesh
+	cb = new THREE.Mesh( cbgeometry, new THREE.MeshFaceMaterial( cbmaterials ) );
+	return cb;
+}
+
 /*
 crea pavimento in legno
 */

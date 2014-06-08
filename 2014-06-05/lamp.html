@@ -49,8 +49,8 @@
         camera.lookAt(10,10,10);
 
 
-        var axis = new THREE.AxisHelper(5000);
-        scene.add(axis);
+        // var axis = new THREE.AxisHelper(5000);
+        // scene.add(axis);
 
         // add subtle ambient lighting
         var ambiColor = "#0c0c0c";
@@ -65,9 +65,17 @@
          scene.add(directionalLight);
 
         //assembly ambient
+
+        //make foor
+        var floor = mkCheckerboardFloor(500,500);
+        floor.position.z = -8;
+        scene.add(floor);
+        
+        //make desk
         var surface = mkDesk3D(17, 26, 1, 18, 18, 0);
         scene.add(surface);
 
+        //make lamp
         var lamp = mkLamp(0,0xffffff);
         lamp.position.z = 0.5;
         scene.add(lamp);
@@ -83,7 +91,7 @@
         var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget , shininess: 80} );
         mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
         //mirrorCube.rotation.x = Math.PI/2;
-        mirrorCube.position.set(-34,-38,4);
+        mirrorCube.position.set(-34,-38,10.5);
         mirrorCubeCamera.position = mirrorCube.position;
         mirrorCube.add(mirrorCornice);
         mirrorCube.rotation.x = Math.PI/2;
@@ -152,7 +160,7 @@
 
         //tween camera 3
         var position6 = { x : 0, y: 30, z: 23};
-        var _target6 = { x : 20, y: 10, z: 8};
+        var _target6 = { x : 20, y: 10, z: 11};
         var tween6 = new TWEEN.Tween(position6).to(_target6, 2500);
         tween6.onUpdate(function(){ 
           camera.position.x = position6.x;
@@ -257,11 +265,7 @@
         controls.asGeom();
 
         function createMesh(geom) {
-          // assign two materials
-          // var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
-          // var meshMaterial = new THREE.MeshNormalMaterial();
           var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xff5555, shininess: 100, metal: true});
-          // meshMaterial.side=THREE.DoubleSide;
           // create a multimaterial
           var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
           return plane;

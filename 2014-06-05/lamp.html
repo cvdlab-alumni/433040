@@ -219,14 +219,14 @@
           this.switch_OFF = false;
           //text properties
           this.size = 1;
-          this.height = 1;
-          this.bevelThickness = 0;
-          this.bevelSize = 0;
-          this.bevelEnabled = true;
-          this.bevelSegments = 3;
-          this.bevelEnabled = true;
-          this.curveSegments = 12;
-          this.steps = 1;
+          this.height = 0.1;
+          // this.bevelThickness = 0;
+          // this.bevelSize = 0;
+          // this.bevelEnabled = true;
+          // this.bevelSegments = 3;
+          // this.bevelEnabled = true;
+          // this.curveSegments = 12;
+          // this.steps = 1;
           this.font = "helvetiker";
           this.weight = "normal";
           // this.style = "italics";
@@ -241,12 +241,12 @@
               height: controls.height,
               weight: controls.weight,
               font: controls.font,
-              bevelThickness: controls.bevelThickness,
-              bevelSize: controls.bevelSize,
-              bevelSegments: controls.bevelSegments,
-              bevelEnabled: controls.bevelEnabled,
-              curveSegments: controls.curveSegments,
-              steps: controls.steps
+              // bevelThickness: controls.bevelThickness,
+              // bevelSize: controls.bevelSize,
+              // bevelSegments: controls.bevelSegments,
+              // bevelEnabled: controls.bevelEnabled,
+              // curveSegments: controls.curveSegments,
+              // steps: controls.steps
             }
 
             //console.log(THREE.FontUtils.faces);
@@ -318,12 +318,12 @@
         bodyContent.add(controls, 'size', 0, 200).onChange(controls.asGeom);
         bodyContent.add(controls, 'height', 0, 200).onChange(controls.asGeom);
         bodyContent.add(controls, 'font', ['bitstream vera sans mono', 'helvetiker']).onChange(controls.asGeom);
-        bodyContent.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
-        bodyContent.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
-        bodyContent.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
-        bodyContent.add(controls, 'bevelEnabled').onChange(controls.asGeom);
-        bodyContent.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
-        bodyContent.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
+        // bodyContent.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
+        // bodyContent.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
+        // bodyContent.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
+        // bodyContent.add(controls, 'bevelEnabled').onChange(controls.asGeom);
+        // bodyContent.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
+        // bodyContent.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
 
         function render() {
           stats.update();

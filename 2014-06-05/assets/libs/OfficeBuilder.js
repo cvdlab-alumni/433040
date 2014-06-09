@@ -171,7 +171,7 @@ function mkCeiling(colorLight) {
 	plafoniera.rotation.x = Math.PI/2
 
 	var bulbGeometry = new THREE.SphereGeometry(0.2,32,32);
-	var bulbMaterial = new THREE.MeshPhongMaterial({color: 0xFFFF00, transparent:true, opacity:0.7,  wireframe: false});
+	var bulbMaterial = new THREE.MeshPhongMaterial({color: 0xFFFF00, transparent:true, opacity:0.3,  wireframe: false});
 	var bulb = new THREE.Mesh(bulbGeometry,bulbMaterial);
 	var cilindroGeometry = new THREE.CylinderGeometry(0.1,0.2,0.5,16);
 	var cilindroMaterial = new THREE.MeshPhongMaterial({color:0x7a7a7a});
@@ -195,9 +195,8 @@ function mkCeiling(colorLight) {
 	spotlight.target = lightTarget;
 
 	//add pointlight for ceiling
-	var pointColor = "#ccffcc";
-  	var pointLight = new THREE.PointLight(pointColor);
-  	pointLight.distance = 2.5;
+	var pointColor = colorLight;
+  	var pointLight = new THREE.PointLight(pointColor,2,2.5);
   	pointLight.position = bulb.position;
   	bulb.add(pointLight);
 

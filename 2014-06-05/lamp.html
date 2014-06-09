@@ -200,7 +200,7 @@
 
         //final tween
         var positionF = lamp.basePivot.rotation;
-        var _targetF = { y: 5.99};
+        var _targetF = { y: 1.89*Math.PI};
         var tweenF = new TWEEN.Tween(positionF).to(_targetF, 500);
         tweenF.delay(29009);
         tweenF.start();
@@ -209,7 +209,7 @@
         var text1;
 
         var controls = new function () {
-          this.alpha = 0.0;
+          this.alpha = 1.89*Math.PI;
           this.beta = Math.PI/4;
           this.gamma = Math.PI/4;
           this.delta = 0.0;
@@ -250,7 +250,7 @@
             }
 
             //console.log(THREE.FontUtils.faces);
-            text1 = createMesh(new THREE.TextGeometry("Nicola Russo - 433040", options));
+            text1 = createMesh(new THREE.TextGeometry("Nicola Russo-433040", options));
             text1.position.z = 1;
             text1.position.x = 5;
             text1.rotation.x = Math.PI/2;

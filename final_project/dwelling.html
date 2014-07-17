@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>DwellingJS - 433040</title> 
+  <style>
+
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #stats{
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    #pointer {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -20px;
+      margin-left: -20px;
+      width: 40px;
+      height: 40px;
+      display: none;
+      background-image: url("assets/textures/general/pointer.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    #video {
+      display: none; 
+      position: absolute; 
+      left 10px: 15px; 
+      bottom: 10px;
+    }
+
+  </style> 
+</head>
+<body>
+  <div id="stats"></div>
+  <div id="pointer"></div>
+  <!-- JavaScript libraries -->
+  <script src="assets/libs/three.min.js"></script> 
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+  <script src="assets/libs/Stats.min.js"></script>
+  <script src="assets/libs/dat.gui.min.js"></script>
+  <script src="assets/libs/TrackballControls.js"></script>
+  <script src="assets/libs/PointerLockControls.js"></script>
+  <script src="assets/libs/tween.min.js"></script>
+  <script src="assets/libs/OBJLoader.js"></script> 
+  <script src="assets/libs/MTLLoader.js"></script>
+  <script src="assets/libs/OBJMTLLoader.js"></script>
+  <script src="assets/libs/HouseBuilder.js"></script>
+  <script src="assets/libs/robotBuilder.js"></script>
+
+  <!-- Scene -->
+  <video id="video" src="assets/movies/totti.mp4" controls="true"></video>
+  <script src="scripts/Camera.js"></script>
+  <script src="scripts/Scene.js"></script>
+  <script src="scripts/Dwelling.js"></script>
+  <script src="scripts/Lights.js"></script>
+  <script src="scripts/Media.js"></script>
+  <script src="scripts/Animations.js"></script>
+  <script src="scripts/Fixtures.js"></script>
+  <script src="scripts/Living.js"></script>
+  <script src="scripts/Kitchen.js"></script>
+  <script src="scripts/BedRooms.js"></script>
+  <script src="scripts/GUI.js"></script>
+  <script>
+    $(function() {
+      $('body').append(renderer.domElement);
+      animate();
+    });    
+  </script>
+  
+
+</body>
+</html>
